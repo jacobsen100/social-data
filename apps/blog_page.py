@@ -10,7 +10,6 @@ import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 # Load data
-# get relative data folder
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath("../datasets").resolve()
 
@@ -79,62 +78,66 @@ layout= html.Div([
     dcc.Markdown(
     '''
         You have just entered the webpage that will explain various aspects of collisions in New York City.
-        The primary goal of this webpage is to facilitate a platform which enables a
-        broad and detailed overview of the collision patterns in New York City.
-        The webpage is divided into three different tabs displayed at the top. The current tab contains summary statistics regarding
-        time, gender and borough. The second tab, Collision Maps, contains two different geographical plots in which information
-        about single collisions and collision patterns specified by the time of interest can be obtained. Lastly, in the Predict Severity tab
-        a model to predict the severity of your injuries in the case of you being a crash-victim based on various demographic and geographical inputs 
+        The primary goal of this webpage is to facilitate a platform that enables a
+        broad and detailed overview of the collision patterns in New York City. It has been created primarly with NYC Deparment of Transportation in mind, 
+        as it is belived they are the ones who could benefit the most from its insights of focal points of interest regarding crash vs. traffic-volume. 
+        The platform is also suitable for the public who seek to gain insights about collisions in New York.
+        The webpage is divided into three different tabs displayed at the top, each contributing with a part of the storytelling
+        regarding the collisions. The current tab contains visualisations which purpose is to reveal collision
+        patterns regarding time, gender and borough. By pressing on the second tab "Collision maps", two different geographical plots
+        will be available. The first provides detailed information about sppecific crash-sites with a heatmap, while the second shows the crash/volume
+        ratio between the boroughs, both specified by the desired range of time. In the last tab "Predict Severity",
+        a model to predict the severity of your injuries in the case of you being a crash victim based on various demographic and external inputs 
         can be found.
     '''),
     html.H1("Total volume and collisions"),
     dcc.Markdown(
     '''
-        The plot shows that the volume and crash percentages follow each other quie well.
-        In the weekdays, the volume has two peak points, one at the morning rush hour and one at the afternoon rush hour. 
+        The plot below shows that the traffic volume and crash ratio follow each other quite well.
+        On the weekdays, the volume has two peak points, one at the morning rush hour and one at the afternoon rush hour. 
         This makes good sense, as this is the time where the traffic is affected by people going to and home from work.
-        The pattern is a little different at the weekend, as there is only one peak point in the afternoon, as this is the 
-        time people are going out to enjoy the city. The volume are also a bit lower at the weekend, due to fewer people are
-        going to work. The same patterns are seen in the crashes, however, the crashes has some higher peak points. 
-        This shows that there is relative more crashes compared to the traffic volume at the peak points, and vice versa at 
-        the other times of the day. The biggest difference between volume and crash percentages is found at sunday morning around 6 AM.
-        Here, the percentage of the total crashes is nearly twice as high as the total volume. 
+        The pattern is a little different at the weekend, as there is only one peak point in the afternoon, as it is belived it is the 
+        time people are going out to enjoy the city. The trafic volume is also a bit lower at the weekend, due to fewer people
+        going to work. The same patterns are seen in the crashes, however, the crashes have some higher peak points. 
+        This shows that there are relatively more crashes compared to the traffic volume at the peak points, and vice versa at 
+        the other times of the day. The biggest difference between traffic volume and crash percentages is found on Sunday morning around 6 AM.
+        Here, the percentage of the total crashes is nearly twice as large as the total volume, thus being the most dangerous time to be
+        in the traffic
     '''),
     dcc.Graph(figure=fig),
     html.H1("Boroughs"),
     dcc.Markdown(
     '''
-        The ratio is clearly on a different level between all the boroughs.
-        Brooklyn seems to be the most dangerous place, while Staten Island is the safest,
-        as their ratio is respectively above and below the others boroughs in the entire week.
-        The most dangerous time to drive in the whole week is in Brooklyn at 5 AM, with a ratio of around 3.5, thus 3.5 times more
-        crashes compared to the traffic.
-        It is also noticed that all the borougs has the same patterns, as all are having peaks at night or early morning.
-        A reason for this could be that the volume is rather low at this point,
-        thus crashes has an great impact in the ratio. Furthermore, drunk driving and people being tired in the middle of the 
-        night are also factors that could increase the number of crashes compared to the volume. 
+        Below plot shows that the ratio is on different levels between all the boroughs.
+        Brooklyn is the most dangerous borough, while Staten Island is the safest,
+        as their ratio is respectively above and below the other boroughs in the entire week.
+        The most dangerous time to drive in the whole week is in Brooklyn at 5 AM, with a ratio of around 3.5.
+        It is also noticed that all the boroughs have the same patterns, as all are having peaks at night or early morning.
+        A reason for this could be that the volume is rather low at this point, thus crashes has a great impact on the ratio.
+        Furthermore, drunk driving and people being tired in the middle of the 
+        night are also factors that could increase the number of crashes compared to the volume
     '''),
     dcc.Graph(figure=fig3),
     html.H1("Gender and age"),
     dcc.Markdown('''
-        The plot shows that the number of crashes is on a steady level in the range between 0 to 16.
+        The below plot shows that the number of crashes is on a steady level in the age-range between 0 to 16.
         From the age of 16, a person is allowed to have a driving license, which is clearly seen in the plot. 
         The number of crashes has an increasing trend from this point and until the person is 30 years old, 
-        which is the peak point for the genders. The reason for this trend could be that the drivers are young and unexperienced,
+        which is the peak point for the both gender. The reason for this trend could be that the drivers are young and inexperienced,
         thus being involved in more crashes. From the age of 30, the trend is decreasing, indicating that the persons are getting
-        more responsible in the traffic.
+        more responsible in the traffic
     ''') ,
     dcc.Graph(figure=fig1),
     html.H1("Severity of crashes over timer"),
     dcc.Markdown(
     '''
-        The plot consists of two y-axes due to the difference in scale, thus the left y-axis shows the number of injured persons,
-        while the right shows the number of killed persons. 
+        The below plot consists of two y-axes due to the difference in scale, thus the left y-axis shows the number of injured persons,
+        while the right shows the number of killed persons in crashes. 
         The plot shows that the number of injured and killed persons
         involved in a crash has more or less the same trend from 2013 to 2017, with some minor deviations. The recent trend is that the number of
-        injured persons decreases, while the number of killed person increases. The number of injured persons dropped with around
-        30% from 2019 to 2020, which could be an effect from corona. However, the number of killed persons 
-        are acutally at the second highest level in 2020, thus not being effected in the same way.
+        injured persons decreases, while the number of killed person increases. The number of injured persons dropped by around
+        30% from 2019 to 2020, which could be an effect of the Coronavirus. However, the number of killed persons 
+        is at the second-highest level in 2020, thus not being affected the same way
     '''),
     dcc.Graph(figure=fig2),
     ],
