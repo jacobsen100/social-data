@@ -28,6 +28,10 @@ df_crash_pivot = pd.pivot_table(df_crash,index=['Hour_of_the_week'],aggfunc=np.s
 # data, ratio
 df_ratio = pd.read_csv(DATA_PATH.joinpath("PercentageMean.csv"))
 
+colors = {
+    'background': '#111111',
+    'text': '#000000'
+}
 
 def plot_barchart(input_range=[0,168]):
     df_plot = df_crash_pivot[(df_crash_pivot['Hour_of_the_week']>input_range[0]) & (df_crash_pivot['Hour_of_the_week']<input_range[1])]
@@ -37,7 +41,7 @@ def plot_barchart(input_range=[0,168]):
 
 def plot_heatmap(input_range=[0,168]):
     df_crashes_merged_plot = df_crash[(df_crash['Hour_of_the_week']>input_range[0]) & (df_crash['Hour_of_the_week']<input_range[1])]
-    fig_map = px.density_mapbox(df_crashes_merged_plot, lat='LATITUDE', lon='LONGITUDE', z='Involved', radius=5,
+    fig_map = px.density_mapbox(df_crashes_merged_plot, lat='LATITUDE', lon='LONGITUDE', z='Involved', radius=3,
     hover_data={'LATITUDE':False,'LONGITUDE':False,'Killed':True,'Injured':True, 'Time':True},
     center = {"lat": 40.730610, "lon": -73.935242}, zoom=9, mapbox_style="carto-positron")
     fig_map.update_layout(
@@ -90,13 +94,9 @@ def plot_ratio_borough(input_range=[0,168]):
     fig_bar_ratio.update_layout(yaxis={'title': '','title_standoff':0,'side':'right'}, xaxis={'title': '','tickangle': 90},
                                 title={'text':"Crash/Volume Ratio", 'x':0, 'y':0.99},titlefont_size = 12,
                                 margin={"l":0,"r":0,"t":15,"b":10},height = 250)
+    fig_bar_ratio.add_hline(y=1,line_dash="dot")
     return fig_bar_ratio
 
-
-colors = {
-    'background': '#111111',
-    'text': '#7FDBFF'
-}
 
 
 layout = dbc.Container([

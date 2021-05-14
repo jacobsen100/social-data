@@ -15,19 +15,15 @@ PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath("../datasets").resolve()
 random_forest_model = joblib.load(open(DATA_PATH.joinpath('random_forest.pkl'), 'rb'))
 
-df_crash = pd.read_csv(DATA_PATH.joinpath("test_data.csv"))
-df_crash_pivot = pd.pivot_table(df_crash,index=['Hour_of_the_week'],aggfunc=np.sum)
-df_crash_pivot.reset_index(level=0, inplace=True)
-
 colors = {
     'background': '#111111',
-    'text': '#7FDBFF'
+    'text': '#000000'
 }
 
 age_list = ['<16','17-25','26-35','36-45','46-55','56-65','65<']
 weekday_list = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-borough_list = ['QUEENS', 'BRONX', 'BROOKLYN', 'MANHATTAN', 'STATEN ISLAND']
-weather_list = ['fog','snow','rain']
+borough_list = ['Queens', 'Bronx', 'Brooklyn', 'Manhattan', 'Staten Island']
+weather_list = ['Fog','Snow','Rain']
 transportation_list = ['Pedestrian','Occupant','Bicyclist']
 gender_list = ['Male','Female','Undefined']
 
@@ -43,7 +39,7 @@ def input_interpreter(age,weather,borough,hour,day,gender,transportation):
 def plot_pred(pred):
     arr= random_forest_model.predict_proba(pred)
     arr1=pd.DataFrame(arr)
-    arr1=arr1.rename(columns = {0: 'Injured', 1: 'Not injured'},index = {0: 'Prediction'})
+    arr1=arr1.rename(columns = {0: 'Injured', 1: 'Unharmed'},index = {0: 'Prediction'})
 
     fig_pred = px.bar(arr1,color_discrete_sequence=["red", "green"],orientation='h',height=100)
     fig_pred.update_layout(
@@ -113,7 +109,6 @@ layout = dbc.Container([
                             placeholder="Gender"
                         ),
                     ],
-                    #style={'width': '25%', 'display': 'inline-block'}
                     ),
 
                     # AGE
@@ -124,18 +119,16 @@ layout = dbc.Container([
                             placeholder="Age"
                         ),
                     ], 
-                    #style={'width': '25%', 'float': 'center', 'display': 'inline-block'}
                     ),
 
                     # WEATHER
                     html.Div([
                         dcc.Dropdown(
                             id='weather-input',
-                            options=[{'label': i, 'value': i} for i in weather_list],
+                            options=[{'label': i, 'value': i} for i in weather_list+['Clear']],
                             placeholder="Weather"
                         ),
                     ], 
-                    #style={'width': '25%', 'float': 'center', 'display': 'inline-block'}
                     ),
                     
                     # BOROUGH
@@ -146,17 +139,15 @@ layout = dbc.Container([
                             placeholder="Borough"
                         ),
                     ], 
-                    #style={'width': '25%', 'float': 'right', 'display': 'inline-block'}
                     ),
                     # HOUR
                     html.Div([
                         dcc.Dropdown(
                             id='hour-input',
-                            options=[{'label': i, 'value': i} for i in range(24)],
+                            options=[{'label': str(i)+":00", 'value': i} if i>9 else {'label': "0"+str(i)+":00", 'value': i} for i in range(24)],
                             placeholder="Hour"
                         ),
                     ],
-                    #style={'width': '33%', 'float': 'left', 'display': 'inline-block'}
                     ),
 
                     # DAY
@@ -167,7 +158,6 @@ layout = dbc.Container([
                             placeholder="Day"
                         ),
                     ], 
-                    #style={'width': '34%', 'float': 'center', 'display': 'inline-block','padding':'0px 0px'}
                     ),
 
                     # TRANSPORT
@@ -178,7 +168,6 @@ layout = dbc.Container([
                             placeholder="Transportation"
                         ),
                     ], 
-                    #style={'width': '33%', 'float': 'right', 'display': 'inline-block'}
                     )
 
                     ], style={

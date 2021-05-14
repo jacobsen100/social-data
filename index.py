@@ -31,7 +31,8 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col(dcc.Link(html.Button('Frontpage',style=button_style), href='/apps/blog_page')),
         dbc.Col(dcc.Link(html.Button('Collision map',style=button_style), href='/apps/map_page')),
-        dbc.Col(dcc.Link(html.Button('Predict severity',style=button_style), href='/apps/prediction_page'))
+        dbc.Col(dcc.Link(html.Button('Predict severity',style=button_style), href='/apps/prediction_page')),
+
     ],no_gutters=False),
     dbc.Row([
         dbc.Col([
