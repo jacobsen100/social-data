@@ -20,7 +20,7 @@ df_ratios = pd.read_csv(DATA_PATH.joinpath("PercentageMean.csv"))
 
 weekday_list = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 github_link = 'https://github.com/jacobsen100/social-data'
-notebook_link = 'https://github.com/jacobsen100/social-data'
+notebook_link = 'https://github.com/jacobsen100/social-data/blob/main/jupyter-notebook/Explainer_Notebook_Final_ipynb.ipynb'
 
 colors = {
     'background': '#111111',
@@ -54,7 +54,7 @@ fig2.update_layout( title={'text':"Number of killed and injured persons",'x':0.5
 
 
 fig3 = px.line(df_ratios, x="hour_of_the_week", y="Crash/Volume Ratio", color="BOROUGH", title="Crash/Volume Ratio for every Borough")
-fig3.update_layout(xaxis = dict(tickvals = np.linspace(1,167-24,7),ticktext = weekday_list),
+fig3.update_layout(xaxis = dict(tickvals = np.linspace(1,167-24,7),ticktext = weekday_list),legend=dict(title=''),
         xaxis_title='Week days',yaxis_title="Crash/Volume Ratio",title={'x':0.5, 'xanchor': 'center'})
 
 
@@ -62,7 +62,7 @@ fig3.update_layout(xaxis = dict(tickvals = np.linspace(1,167-24,7),ticktext = we
 layout= html.Div([
     html.Br(),
     dbc.Row([
-        dbc.Col(html.H1("Welcome!"),width=4),
+        dbc.Col(html.H1("NYC Collisions"),width=6),
         dbc.Col([html.Div(dcc.Link("Github", href=github_link),style={'display': 'inline-block'}),
                 html.A([html.Img(src=app.get_asset_url("GitHub-Mark-32px.png"),
                             style={'height':'32px', 'width':'32px',"margin-left":"5px"})
@@ -77,7 +77,7 @@ layout= html.Div([
         ),
     dcc.Markdown(
     '''
-        You have just entered the webpage that will explain various aspects of collisions in New York City.
+        Welcome. You have just entered the webpage that will explain various aspects of collisions in New York City.
         The primary goal of this webpage is to facilitate a platform that enables a
         broad and detailed overview of the collision patterns in New York City. It has been created primarly with NYC Deparment of Transportation in mind, 
         as it is belived they are the ones who could benefit the most from its insights of focal points of interest regarding crash vs. traffic-volume. 
