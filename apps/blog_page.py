@@ -15,7 +15,7 @@ DATA_PATH = PATH.joinpath("../datasets").resolve()
 
 df_age_sex = pd.read_csv(DATA_PATH.joinpath("df_age_sex.csv"))
 injuryplot = pd.read_csv(DATA_PATH.joinpath("injuryplot.csv"))
-#df_weather_plot = pd.read_csv(DATA_PATH.joinpath("df_weather_plot.csv"))
+
 df_ratios = pd.read_csv(DATA_PATH.joinpath("PercentageMean.csv"))
 
 weekday_list = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
@@ -63,11 +63,11 @@ layout= html.Div([
     html.Br(),
     dbc.Row([
         dbc.Col(html.H1("NYC Collisions"),width=6),
-        dbc.Col([html.Div(dcc.Link("Github", href=github_link),style={'display': 'inline-block'}),
+        dbc.Col([html.Div("Github",style={'display': 'inline-block'}),
                 html.A([html.Img(src=app.get_asset_url("GitHub-Mark-32px.png"),
                             style={'height':'32px', 'width':'32px',"margin-left":"5px"})
                         ],href= github_link),       
-                html.Div(dcc.Link("Notebook", href=notebook_link),style={'display': 'inline-block',"margin-left":"15px"}),
+                html.Div("Notebook",style={'display': 'inline-block',"margin-left":"15px"}),
                 html.A([html.Img(src=app.get_asset_url("JupyterNotebook-64px.png"),
                             style={'height':'32px', 'width':'32px',"margin-left":"5px"})
                         ],href= notebook_link)       
@@ -78,6 +78,7 @@ layout= html.Div([
     dcc.Markdown(
     '''
         Welcome. You have just entered the webpage that will explain various aspects of collisions in New York City.
+        The associated github and notebook can be accessed by the icons above.
         The primary goal of this webpage is to facilitate a platform that enables a
         broad and detailed overview of the collision patterns in New York City. It has been created primarly with NYC Deparment of Transportation in mind, 
         as it is belived they are the ones who could benefit the most from its insights of focal points of interest regarding crash vs. traffic-volume. 
