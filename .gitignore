@@ -1,2 +1,3 @@
 *.pyc
 jupyter-notebook/
+.DS_Store
