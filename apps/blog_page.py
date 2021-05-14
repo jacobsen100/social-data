@@ -67,7 +67,7 @@ layout= html.Div([
                 html.A([html.Img(src=app.get_asset_url("GitHub-Mark-32px.png"),
                             style={'height':'32px', 'width':'32px',"margin-left":"5px"})
                         ],href= github_link),       
-                html.Div(dcc.Link("Notebook", href=github_link),style={'display': 'inline-block',"margin-left":"15px"}),
+                html.Div(dcc.Link("Notebook", href=notebook_link),style={'display': 'inline-block',"margin-left":"15px"}),
                 html.A([html.Img(src=app.get_asset_url("JupyterNotebook-64px.png"),
                             style={'height':'32px', 'width':'32px',"margin-left":"5px"})
                         ],href= notebook_link)       
