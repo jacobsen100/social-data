@@ -140,6 +140,19 @@ layout= html.Div([
         is at the second-highest level in 2020, thus not being affected the same way
     '''),
     dcc.Graph(figure=fig2),
+    html.H1("Summary"),
+    dcc.Markdown('''
+     The key findings from the visualisations are that Brooklyn has the highest crash/volume ratio while Staten Island has the lowest. 
+     On this basis, it is recommended to the NYC Department of Transportation to take inspirations from the infrastructure in Staten Island 
+     and implement this in Brooklyn, if possible. Furthermore, the crash/volume ratio has its peak in all of the boroughs on Sunday morning,
+     which means it can be recommended to the NYC Department of Transportation to be specifically aware of this time-frame.  
+     Another impact area could be to target a campaign towards persons between 16 and 30 regarding traffic safety, 
+     due to the rapid increase in collisions for this age group.
+     It could be interesting to investigate the reason for this trend, and hereby prepare solution-oriented proposals.
+     
+     **Now that you have finished reading the front page, we recommend you to browse the two next tabs to explore more insights about collisions in New York.**
+     '''
+    )
     ],
     style={ 'Align': 'center',
             'color': colors['text'],
