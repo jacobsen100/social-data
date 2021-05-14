@@ -43,7 +43,7 @@ def plot_pred(pred):
 
     fig_pred = px.bar(arr1,color_discrete_sequence=["red", "green"],orientation='h',height=100)
     fig_pred.update_layout(
-        title={'text':"Probaility of prediction", 'x': 0.01, 'yanchor':'top'},titlefont_size = 12,
+        title={'text':"Probability of prediction", 'x': 0.01, 'yanchor':'top'},titlefont_size = 12,
         xaxis={'title': '', 'range': [0, 1]},yaxis={'visible':False},
         paper_bgcolor='rgba(0,0,0,0)',plot_bgcolor='rgba(0,0,0,0)',
         margin={"l":0,"r":0,"t":5,"b":0},
@@ -73,7 +73,8 @@ Y=['Time of the week',
  '0-16','17-25','26-35','36-45','46-55','56-65','65+']
 df_model_factors = pd.concat([pd.Series(X, name="Effect"), pd.Series(Y,name="Factor")], axis=1)
 fig_bar_factors = px.bar(df_model_factors, x='Effect', y='Factor')
-fig_bar_factors.update_layout(yaxis={'title': '','title_standoff':0},margin={"l":0,"r":0,"t":0,"b":0})
+fig_bar_factors.update_layout(title={'text':"Feature Importance",'x':0.55,'y':0.99},
+                                yaxis={'title': '','title_standoff':0},margin={"l":0,"r":0,"t":20,"b":0})
 
 ### PAGE ###
 layout = dbc.Container([
@@ -85,7 +86,7 @@ layout = dbc.Container([
                     On the left is a model that predicts whether a crash causes injuries or not.
                     Input values in all the dropdowns, press predict and the model will return the severity of the crash along
                     with the models certainty.\
-                    On the right hand side is a plot over which factors have the most affect on the outcome of the crash.
+                    On the right hand side is a plot over which factors have the most effect on the outcome of the crash.
                         ''',
                     style={
                         'textAlign': 'left',

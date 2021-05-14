@@ -15,7 +15,7 @@ button_style = {
   'background-color': '#d0e1f5',
   #'border': None,
   'color': 'white',
-  'height':'100px',
+  'height':'80px',
   #'width':'25%',
   'width':'100%',
   'padding': '5px 32px',
@@ -30,7 +30,7 @@ button_style = {
 app.layout = dbc.Container([
     dbc.Row([
         dbc.Col(dcc.Link(html.Button('Frontpage',style=button_style), href='/apps/blog_page')),
-        dbc.Col(dcc.Link(html.Button('Collision map',style=button_style), href='/apps/map_page')),
+        dbc.Col(dcc.Link(html.Button('Collision maps',style=button_style), href='/apps/map_page')),
         dbc.Col(dcc.Link(html.Button('Predict severity',style=button_style), href='/apps/prediction_page')),
 
     ],no_gutters=False),

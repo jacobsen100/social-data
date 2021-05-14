@@ -4,6 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.express as px
 import pathlib
+import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
 import pandas as pd
@@ -19,6 +20,8 @@ injuryplot = pd.read_csv(DATA_PATH.joinpath("injuryplot.csv"))
 df_ratios = pd.read_csv(DATA_PATH.joinpath("PercentageMean.csv"))
 
 weekday_list = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+github_link = 'https://github.com/jacobsen100/social-data'
+notebook_link = 'https://github.com/jacobsen100/social-data'
 
 colors = {
     'background': '#111111',
@@ -57,15 +60,29 @@ fig3.update_layout(xaxis = dict(tickvals = np.linspace(1,167-24,7),ticktext = we
 
 
 ### PAGE ###
-layout = html.Div([
+layout= html.Div([
+    html.Br(),
+    dbc.Row([
+        dbc.Col(html.H1("Welcome!"),width=4),
+        dbc.Col([html.Div(dcc.Link("Github", href=github_link),style={'display': 'inline-block'}),
+                html.A([html.Img(src=app.get_asset_url("GitHub-Mark-32px.png"),
+                            style={'height':'32px', 'width':'32px',"margin-left":"5px"})
+                        ],href= github_link),       
+                html.Div(dcc.Link("Notebook", href=github_link),style={'display': 'inline-block',"margin-left":"15px"}),
+                html.A([html.Img(src=app.get_asset_url("JupyterNotebook-64px.png"),
+                            style={'height':'32px', 'width':'32px',"margin-left":"5px"})
+                        ],href= notebook_link)       
+                ],width=4,style={"margin-top":"5px"}
+        ),
+            ],justify="between",
+        ),
     dcc.Markdown(
     '''
-        # Welcome!
         You have just entered the webpage that will explain various aspects of collisions in New York City.
         The primary goal of this webpage is to facilitate a platform which enables a
         broad and detailed overview of the collision patterns in New York City.
         The webpage is divided into three different tabs displayed at the top. The current tab contains summary statistics regarding
-        time, gender and borough. The second tab, Collision Map, contains two different geographical plots in which information
+        time, gender and borough. The second tab, Collision Maps, contains two different geographical plots in which information
         about single collisions and collision patterns specified by the time of interest can be obtained. Lastly, in the Predict Severity tab
         a model to predict the severity of your injuries in the case of you being a crash-victim based on various demographic and geographical inputs 
         can be found.
@@ -120,19 +137,10 @@ layout = html.Div([
         are acutally at the second highest level in 2020, thus not being effected in the same way.
     '''),
     dcc.Graph(figure=fig2),
-
-    html.A([html.Img(src=app.get_asset_url("GitHub-Mark-32px.png"))],
-            href= 'https://github.com/jacobsen100/social-data',
-            style={'display': 'inline-block'}
-    ),            
-    html.Div(["Repository for the website"],style={'display': 'inline-block'}),
-],
-style={
-            'Align': 'center',
+    ],
+    style={ 'Align': 'center',
             'color': colors['text'],
             'margin-left': 'auto',
             'margin-right': 'auto',
-            'width': '70%'
-        }
+            'width': '70%'}
 )
-

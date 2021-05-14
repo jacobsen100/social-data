@@ -32,15 +32,19 @@ colors = {
     'background': '#111111',
     'text': '#000000'
 }
+number_of_observations = len(df_crash)
+global observations_in_timeframe
 
 def plot_barchart(input_range=[0,168]):
     df_plot = df_crash_pivot[(df_crash_pivot['Hour_of_the_week']>input_range[0]) & (df_crash_pivot['Hour_of_the_week']<input_range[1])]
     fig_bar = px.bar(df_plot, x='Hour_of_the_week', y='Involved')
-    fig_bar.update_layout(margin={"l":0,"r":0,"t":0,"b":0},height = 100)
+    fig_bar.update_layout( xaxis={'title': 'Hour of the week'},margin={"l":0,"r":0,"t":0,"b":0},height = 100)
     return fig_bar
 
 def plot_heatmap(input_range=[0,168]):
     df_crashes_merged_plot = df_crash[(df_crash['Hour_of_the_week']>input_range[0]) & (df_crash['Hour_of_the_week']<input_range[1])]
+    global observations_in_timeframe 
+    observations_in_timeframe= len(df_crashes_merged_plot)
     fig_map = px.density_mapbox(df_crashes_merged_plot, lat='LATITUDE', lon='LONGITUDE', z='Involved', radius=3,
     hover_data={'LATITUDE':False,'LONGITUDE':False,'Killed':True,'Injured':True, 'Time':True},
     center = {"lat": 40.730610, "lon": -73.935242}, zoom=9, mapbox_style="carto-positron")
@@ -53,6 +57,8 @@ def plot_heatmap(input_range=[0,168]):
 
 def plot_chloropleth(input_range=[0,168]):
     df_ratio_plot = df_ratio[(df_ratio['hour_of_the_week']>input_range[0])&(df_ratio['hour_of_the_week']<input_range[1])].groupby("BOROUGH").mean().reset_index()
+    global observations_in_timeframe 
+    observations_in_timeframe = len(df_ratio_plot)
     df_ratio_plot['FIPS'] = df_ratio_plot['BOROUGH'].apply(lambda x: '36005' if x == "BRONX" else '36047' if x == "BROOKLYN" else '36061' if x == "MANHATTAN" else  '36081' if x == "QUEENS" else '36085' if x == "STATEN ISLAND" else "No Borough")
     fig_map_borough = px.choropleth_mapbox(df_ratio_plot, geojson=counties, locations='FIPS', color='Crash/Volume Ratio',
                            range_color=(min(df_ratio['Crash/Volume Ratio']),max(df_ratio['Crash/Volume Ratio'])),
@@ -71,18 +77,18 @@ def plot_chloropleth(input_range=[0,168]):
 def plot_crash_borough(input_range=[0,168]):
     df_temp = df_ratio[(df_ratio['hour_of_the_week']>input_range[0]) & (df_ratio['hour_of_the_week']<input_range[1])]
     df_pivot = pd.pivot_table(df_temp,index=['BOROUGH'],aggfunc=np.sum).reset_index()
-    fig_bar_crash = px.bar(df_pivot, x='BOROUGH', y='Percentage_Crash', title='Percentage Crashed')
+    fig_bar_crash = px.bar(df_pivot, x='BOROUGH', y='Percentage_Crash', color='BOROUGH')
     fig_bar_crash.update_layout(yaxis={'title': '','title_standoff':0,'side':'right'}, xaxis={'visible': False},
-                                title={'text':"Percentage Crashed", 'x':0, 'y':0.98},titlefont_size = 12,
+                                title={'text':"Percentage Crashed", 'x':0, 'y':0.98},titlefont_size = 12, showlegend=False,
                                 margin={"l":0,"r":0,"t":15,"b":0},height = 150)
     return fig_bar_crash
 
 def plot_volume_borough(input_range=[0,168]):
     df_temp = df_ratio[(df_ratio['hour_of_the_week']>input_range[0]) & (df_ratio['hour_of_the_week']<input_range[1])]
     df_pivot = pd.pivot_table(df_temp,index=['BOROUGH'],aggfunc=np.sum).reset_index()
-    fig_bar_volume = px.bar(df_pivot, x='BOROUGH', y='Percentage_Volume')
+    fig_bar_volume = px.bar(df_pivot, x='BOROUGH', y='Percentage_Volume',color='BOROUGH',)
     fig_bar_volume.update_layout(yaxis={'title': '','title_standoff':0,'side':'right'}, xaxis={'visible': False},
-                                title={'text':"Percentage Volume",  'x':0,'y':0.98},titlefont_size = 12,
+                                title={'text':"Percentage Volume",  'x':0,'y':0.98},titlefont_size = 12, showlegend=False,
                                 margin={"l":0,"r":0,"t":15,"b":0},height = 150)
     return fig_bar_volume
 
@@ -90,9 +96,9 @@ def plot_ratio_borough(input_range=[0,168]):
     #df_temp = df_ratio[(df_ratio['hour_of_the_week']>input_range[0]) & (df_ratio['hour_of_the_week']<input_range[1])]
     df_temp = df_ratio[(df_ratio['hour_of_the_week']>input_range[0])&(df_ratio['hour_of_the_week']<input_range[1])].groupby("BOROUGH").mean()
     df_pivot = pd.pivot_table(df_temp,index=['BOROUGH'],aggfunc=np.sum).reset_index()
-    fig_bar_ratio= px.bar(df_pivot, x='BOROUGH', y='Crash/Volume Ratio')
+    fig_bar_ratio= px.bar(df_pivot, x='BOROUGH', y='Crash/Volume Ratio',color='BOROUGH',)
     fig_bar_ratio.update_layout(yaxis={'title': '','title_standoff':0,'side':'right'}, xaxis={'title': '','tickangle': 90},
-                                title={'text':"Crash/Volume Ratio", 'x':0, 'y':0.99},titlefont_size = 12,
+                                title={'text':"Crash/Volume Ratio", 'x':0, 'y':0.99},titlefont_size = 12, showlegend=False,
                                 margin={"l":0,"r":0,"t":15,"b":10},height = 250)
     fig_bar_ratio.add_hline(y=1,line_dash="dot")
     return fig_bar_ratio
@@ -106,9 +112,10 @@ layout = dbc.Container([
         dbc.Col([
             dcc.Markdown(
                 '''
-                This collision map gives an overview of where the incidents occur.
+                This collision maps gives an overview of where the incidents occur.
                  Use the slider below to filter the data for specific timeframes during the hour of the week.
                  Change the map to display the ratio between volume and crashes across boroughs by using the dropdown to the right.
+                 Please have patients while the graphs loads.
                 ''',
                 style={
                     'textAlign': 'left',
@@ -136,7 +143,7 @@ layout = dbc.Container([
                 step=1,
                 value=[24, 72],
                 marks={
-                0: {'label': 'Monday', 'style': {'color': '#77b0b1'}},
+                0: {'label': 'Monday'},
                 24: {'label': 'Tuesday'},
                 48: {'label': 'Wednesday'},
                 72: {'label': 'Thursday'},
@@ -168,7 +175,8 @@ layout = dbc.Container([
                     value='Heatmap',
                     placeholder="Type of graph"
                 ),
-                html.Br(),
+                html.Div(id='counter',style={'color':'#7b7d8d','fontsize':'9px','margin-top':'7px','margin-bottom':'7px'}),
+                #html.Br(),
                 dcc.Loading(
                     dcc.Graph(
                         id='barchart-crash',
@@ -218,7 +226,8 @@ layout = dbc.Container([
     Output('mapchart','figure'),
     Output('barchart-crash','figure'),
     Output('barchart-volume','figure'),
-    Output('barchart-ratio','figure')
+    Output('barchart-ratio','figure'),
+    Output('counter', 'children')
     ],
     [
     Input('hour_of_week_slider','value'),
@@ -235,4 +244,5 @@ def update_figures(slider_range, map_graph):
     fig_bar_crash = plot_crash_borough(slider_range)
     fig_bar_volume = plot_volume_borough(slider_range)
     fig_bar_ratio = plot_ratio_borough(slider_range)
-    return fig_barchart, fig_map, fig_bar_crash, fig_bar_volume, fig_bar_ratio
+    count = f'Collisions within timeframe: {observations_in_timeframe} / {number_of_observations}'
+    return fig_barchart, fig_map, fig_bar_crash, fig_bar_volume, fig_bar_ratio, count
