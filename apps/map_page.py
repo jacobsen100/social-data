@@ -44,7 +44,7 @@ def plot_barchart(input_range=[0,168]):
 def plot_heatmap(input_range=[0,168]):
     df_crashes_merged_plot = df_crash[(df_crash['Hour_of_the_week']>input_range[0]) & (df_crash['Hour_of_the_week']<input_range[1])]
     global observations_in_timeframe 
-    observations_in_timeframe= len(df_crashes_merged_plot)
+    observations_in_timeframe = len(df_crashes_merged_plot)
     fig_map = px.density_mapbox(df_crashes_merged_plot, lat='LATITUDE', lon='LONGITUDE', z='Involved', radius=3,
     hover_data={'LATITUDE':False,'LONGITUDE':False,'Killed':True,'Injured':True, 'Time':True},
     center = {"lat": 40.730610, "lon": -73.935242}, zoom=9, mapbox_style="carto-positron")
@@ -56,9 +56,7 @@ def plot_heatmap(input_range=[0,168]):
     return fig_map
 
 def plot_chloropleth(input_range=[0,168]):
-    df_ratio_plot = df_ratio[(df_ratio['hour_of_the_week']>input_range[0])&(df_ratio['hour_of_the_week']<input_range[1])].groupby("BOROUGH").mean().reset_index()
-    global observations_in_timeframe 
-    observations_in_timeframe = len(df_ratio_plot)
+    df_ratio_plot = df_ratio[(df_ratio['hour_of_the_week']>input_range[0])&(df_ratio['hour_of_the_week']<input_range[1])].mean().reset_index()
     df_ratio_plot['FIPS'] = df_ratio_plot['BOROUGH'].apply(lambda x: '36005' if x == "BRONX" else '36047' if x == "BROOKLYN" else '36061' if x == "MANHATTAN" else  '36081' if x == "QUEENS" else '36085' if x == "STATEN ISLAND" else "No Borough")
     fig_map_borough = px.choropleth_mapbox(df_ratio_plot, geojson=counties, locations='FIPS', color='Crash/Volume Ratio',
                            range_color=(min(df_ratio['Crash/Volume Ratio']),max(df_ratio['Crash/Volume Ratio'])),
@@ -239,10 +237,12 @@ def update_figures(slider_range, map_graph):
     fig_barchart = plot_barchart(slider_range)
     if map_graph == 'Heatmap':
         fig_map = plot_heatmap(slider_range)
+        count = f'Collisions within timeframe: {observations_in_timeframe} / {number_of_observations}'
     else: #Chloropleth
         fig_map = plot_chloropleth(slider_range)
+        count = f'Hours picked: {slider_range[1]-slider_range[0]} / {168}'
     fig_bar_crash = plot_crash_borough(slider_range)
     fig_bar_volume = plot_volume_borough(slider_range)
     fig_bar_ratio = plot_ratio_borough(slider_range)
-    count = f'Collisions within timeframe: {observations_in_timeframe} / {number_of_observations}'
+    #count = f'Collisions within timeframe: {observations_in_timeframe} / {number_of_observations}'
     return fig_barchart, fig_map, fig_bar_crash, fig_bar_volume, fig_bar_ratio, count
